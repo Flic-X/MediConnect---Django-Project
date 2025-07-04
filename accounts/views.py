@@ -4,6 +4,7 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 
 def register_view(request):
+    print("REGISTER VIEW CALLED ✅")  # DEBUG
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -14,6 +15,7 @@ def register_view(request):
         form = CustomUserCreationForm()
     return render(request, 'accounts/register.html', {'form': form})
 
+
 @login_required
 def dashboard_view(request):
     if request.user.user_type == 'doctor':
@@ -21,6 +23,4 @@ def dashboard_view(request):
     elif request.user.user_type == 'patient':
         return render(request, 'accounts/patient_dashboard.html')
     else:
-        return redirect('login')    
-
-    
+        return redirect('login')
