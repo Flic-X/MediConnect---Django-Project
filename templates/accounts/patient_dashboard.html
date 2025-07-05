@@ -3,3 +3,12 @@
 <h2>Patient Dashboard</h2>
 <p>Welcome, Patient{{ user.username }}</p>
 {% endblock %}
+
+<p><a href="{% url 'profile' %}">Edit Profile</a></p>
+
+<p>Email: {{ request.user.email }}</p>
+{% if request.user.user_type == "doctor" %}
+  <p>Specialization: {{ request.user.specialization }}</p>
+{% else %}
+  <p>Age: {{ request.user.age }}</p>
+{% endif %}

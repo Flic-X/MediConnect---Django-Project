@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Login</h2>
+
+    {% if form.errors %}
+        <p style="color: red;">Invalid credentials. Please try again.<p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="username">Username:</label>
+        {{ form.username }}
+
+        <label for="password">Password:</label>
+        {{form.password }}
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p>Don't have an account? <a href="{% url 'register' %}">Register here</a>.</p>
+{% endblock %}
+        
