@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Welcome Dr. {{ doctor.username }}</h2>
+<h4>Your Upcoming Appointments</h4>
+
+{% if appointments %}
+    <ul>
+    {% for appt in appointments %}
+        <li>
+            <strong>Patient:</strong> {{ appt.patient.username }}<br>
+            <strong>Age:</strong> {{ appt.patient.age }}<br>
+            <strong>Date:</strong> {{ appt.date|date:"D, M d, Y - H:i" }}<br>
+            <strong>Symptoms:</strong> {{ appt.symptoms }}
+        </li>
+        <hr>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No appointments scheduled yet.</p>
+{% endif %}
+
+
+{% endblock %}
