@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2>Patient Dashboard</h2>
-<p>Welcome, Patient{{ user.username }}</p>
+<p>Welcome, Patient {{ user.username }}</p>
 {% endblock %}
 
 <p><a href="{% url 'profile' %}">Edit Profile</a></p>

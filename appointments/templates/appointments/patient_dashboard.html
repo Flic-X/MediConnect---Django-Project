@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Welcome, {{ request.user.username }}</h2>
+
+<h3>Upcoming Appointments</h3>
+{% if upcoming_appointments %}
+    <ul>
+        {% for appt in upcoming_appointments %}
+            <li>
+                {{ appt.date }} at {{ appt.time }} with Dr. {{ appt.doctor.username }}
+                
+                {% if appt.status == 'booked' %}
+                    <form method="post" action="{% url 'cancel_appointment' appt.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</button>
+                    </form>
+                {% else %}
+                    <em>(Cancelled)</em>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No upcoming appointments.</p>
+{% endif %}
+
+<h3>Past Appointments</h3>
+{% if past_appointments %}
+    <ul>
+        {% for appt in past_appointments %}
+            <li>
+                {{ appt.date }} at {{ appt.time }} with Dr. {{ appt.doctor.username }}
+                {% if appt.status == 'cancelled' %}
+                    <em>(Cancelled)</em>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No past appointments.</p>
+{% endif %}
+{% endblock %}

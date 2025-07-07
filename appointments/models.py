@@ -1,13 +1,21 @@
 from django.db import models
+from django.conf import settings
 from accounts.models import CustomUser
-from django.utils import timezone
 
 class Appointment(models.Model):
-    doctor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='appointments_as_doctor')
-    patient = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='appointments_as_patient')
-    date = models.DateTimeField(default=timezone.now)
+    STATUS_CHOICES = (
+        ('Pending', 'Pending'),
+        ('Confirmed', 'Confirmed'),
+        ('Completed', 'Completed'),
+    )
+
+    doctor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='doctor_appointments')
+    patient = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='patient_appointments')
+    date = models.DateField()
+    time = models.TimeField()
     symptoms = models.TextField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Appointment on {self.date.strftime('%Y-%m-%d %H:%M')} - Dr. {self.doctor.username} with {self.patient.username}"
-    
+        return f"{self.patient.username} -> {self.doctor.username} on {self.date} at {self.time}"

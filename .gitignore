@@ -1,43 +1,19 @@
-# Bytecode & virtual env
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-env/
-
-# Django database
-*.sqlite3
-
-# Django secrets
-*.log
-*.pot
-*.pyc
 *.pyo
-*.pyd
-*.db
 
-# Django files
-*.env
-.env
-
-# VSCode / Mac / OS junk
-.vscode/
-.DS_Store
-
-# Static & media (optional if large)
-staticfiles/
-media/
-
-# Django secret settings
-mediconnect/settings_secret.py
-
-# Byte-compiled / cache
-__pycache__/
-*.py[cod]
+# SQLite database
+db.sqlite3
 
 # Virtual environment
 env/
 
-# SQLite DB
-db.sqlite3
+# Django stuff:
+*.log
+*.pot
+*.pyc
 
-# Media files
-/media/
+# VSCode and OS files
+.vscode/
+.DS_Store

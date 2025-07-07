@@ -6,15 +6,23 @@
 
 {% if appointments %}
     <ul>
-    {% for appt in appointments %}
-        <li>
-            <strong>Patient:</strong> {{ appt.patient.username }}<br>
-            <strong>Age:</strong> {{ appt.patient.age }}<br>
-            <strong>Date:</strong> {{ appt.date|date:"D, M d, Y - H:i" }}<br>
-            <strong>Symptoms:</strong> {{ appt.symptoms }}
-        </li>
-        <hr>
-    {% endfor %}
+        {% for appt in appointments %}
+            <li>
+                {{ appt.date }} at {{ appt.time }} with {{ appt.patient.username }}
+                - Status: {{ appt.get_status_display }}
+
+                {% if appt.status == 'booked' %}
+                    <form method="post" action="{% url 'mark_appointment_completed' appt.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Mark as Completed</button>
+                    </form>
+                {% elif appt.status == 'completed' %}
+                    <em>(Completed)</em>
+                {% elif appt.status == 'cancelled' %}
+                    <em>(Cancelled)</em>
+                {% endif %}
+            </li>
+        {% endfor %}
     </ul>
 {% else %}
     <p>No appointments scheduled yet.</p>
