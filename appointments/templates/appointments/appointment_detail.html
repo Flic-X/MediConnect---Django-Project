@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="card">
+    <div class="card-body">
+      <h3 class="card-title">Appointment Details</h3>
+
+      <p><strong>Doctor:</strong> Dr. {{ appointment.doctor.username }}</p>
+      <p><strong>Patient:</strong> {{ appointment.patient.username }}</p>
+      <p><strong>Date:</strong> {{ appointment.date }}</p>
+      <p><strong>Time:</strong> {{ appointment.time }}</p>
+      <p><strong>Symptoms:</strong> {{ appointment.symptoms }}</p>
+
+      <p>
+        <strong>Status:</strong>
+        <span class="badge
+            {% if appointment.status == 'booked' %} bg-warning
+            {% elif appointment.status == 'completed' %} bg-success
+            {% elif appointment.status == 'cancelled' %} bg-danger
+            {% endif %}">
+          {{ appointment.get_status_display }}
+        </span>
+      </p>
+
+      <!-- Show action buttons conditionally -->
+      {% if user == appointment.doctor and appointment.status == 'booked' %}
+        <a href="{% url 'update_appointment_status' appointment.id %}" class="btn btn-sm btn-primary">Update Status</a>
+      {% elif user == appointment.patient and appointment.status == 'booked' %}
+        <form method="post" action="{% url 'cancel_appointment' appointment.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-danger"
+                  onclick="return confirm('Are you sure you want to cancel this appointment?');">
+            Cancel Appointment
+          </button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
+

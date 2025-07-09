@@ -9,3 +9,8 @@ class AppointmentForm(forms.ModelForm):
             'date': forms.DateInput(attrs={'type': 'date'}),
             'time': forms.TimeInput(attrs={'type': 'time'}),
         }
+
+class AppointmentStatusForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = ['status'] 

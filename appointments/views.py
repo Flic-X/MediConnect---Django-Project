@@ -1,9 +1,12 @@
 from datetime import timezone
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Appointment
 from .forms import AppointmentForm
 from django.utils import timezone
+from django.http import HttpResponseForbidden
+from .forms import AppointmentStatusForm
+
 
 @login_required
 def doctor_dashboard(request):
@@ -53,3 +56,25 @@ def mark_appointment_completed(request, appointment_id):
         appointment.status = 'completed'
         appointment.save()
     return redirect('doctor_dashboard')
+
+@login_required
+def update_appointment_status(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id, doctor=request.user)
+
+    if request.method == 'POST':
+        form = AppointmentStatusForm(request.POST, instance=appointment)
+        if form.is_valid():
+            form.save()
+            return redirect('doctor_dashboard')
+    else:
+        form = AppointmentStatusForm(instance=appointment)
+    return render(request, 'appointments/update_status.html', {'form': form, 'appointment': appointment})
+
+def appointment_detail(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id)
+    
+    # Optional security check:
+    if request.user != appointment.patient and request.user != appointment.doctor:
+        return render(request, '403.html', status=403)
+
+    return render(request, 'appointments/appointment_detail.html', {'appointment': appointment})

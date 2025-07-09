@@ -8,20 +8,35 @@
     <ul>
         {% for appt in appointments %}
             <li>
-                {{ appt.date }} at {{ appt.time }} with {{ appt.patient.username }}
-                - Status: {{ appt.get_status_display }}
+    <a href="{% url 'appointment_detail' appt.id %}">
+        {{ appt.date }} at {{ appt.time }} with {{ appt.patient.username }}
+    </a>
 
-                {% if appt.status == 'booked' %}
-                    <form method="post" action="{% url 'mark_appointment_completed' appt.id %}" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit">Mark as Completed</button>
-                    </form>
-                {% elif appt.status == 'completed' %}
-                    <em>(Completed)</em>
-                {% elif appt.status == 'cancelled' %}
-                    <em>(Cancelled)</em>
-                {% endif %}
-            </li>
+    <!-- 💡 Colored status badge -->
+    <span class="badge 
+        {% if appt.status == 'booked' %} bg-warning
+        {% elif appt.status == 'completed' %} bg-success
+        {% elif appt.status == 'cancelled' %} bg-danger
+        {% endif %}">
+        {{ appt.get_status_display }}
+    </span>
+
+    <!-- 🛠 Update status link -->
+    <a href="{% url 'update_appointment_status' appt.id %}" class="ms-2">Update Status</a>
+
+    <!-- 🎯 Completion form / message -->
+    {% if appt.status == 'booked' %}
+        <form method="post" action="{% url 'mark_appointment_completed' appt.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline-success ms-2">Mark as Completed</button>
+        </form>
+    {% elif appt.status == 'completed' %}
+        <em class="text-success ms-2">(Completed)</em>
+    {% elif appt.status == 'cancelled' %}
+        <em class="text-danger ms-2">(Cancelled)</em>
+    {% endif %}
+</li>
+
         {% endfor %}
     </ul>
 {% else %}
